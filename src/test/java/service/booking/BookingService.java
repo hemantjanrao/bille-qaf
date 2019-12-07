@@ -62,7 +62,6 @@ public class BookingService extends AbstractBookerService {
                 .when()
                 .request(Method.PUT, BookingEndpoint.BOOKING_ID.getUrl(bookingID))
                 .then()
-                 .log().all()
                 .extract().response();
     }
 }
