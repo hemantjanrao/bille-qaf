@@ -1,6 +1,7 @@
 package stepdef;
 
 import api.dto.AbstractDTO;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,9 +15,9 @@ import static com.google.common.truth.Truth.assertThat;
 public class BookingStepDef {
 
     private BookingService service = null;
-    private Booking booking, bookingUpdate = null;
-    private AbstractDTO response, updatedResponse = null;
-    private int bookingIdToBeUpdated = 0;
+    private Booking booking;
+    private AbstractDTO response;
+    private int bookingIdToBeUpdated, bookingIdToBeDeleted = 0;
 
     @Given("booking service is up")
     public void featureIsAvailableToUser() {
@@ -43,11 +44,10 @@ public class BookingStepDef {
                 .isEqualTo(booking);
     }
 
-
     @Then("^Update the created booking$")
     public void updateTheCreatedBooking() {
         bookingIdToBeUpdated = ((CreateBookingResponse) response).bookingid;
-        bookingUpdate = Booking.newInstance();
+        Booking bookingUpdate = Booking.newInstance();
 
         // and an auth token
         String authToken = new BookingService().createAuthToken(
@@ -61,5 +61,20 @@ public class BookingStepDef {
         Booking booking = service.getBooking(bookingIdToBeUpdated);
 
         assertThat(service.getBooking(bookingIdToBeUpdated)).isEqualTo(booking);
+    }
+
+    @And("^Delete the created booking$")
+    public void deleteTheCreatedBooking() {
+        bookingIdToBeDeleted = ((CreateBookingResponse) response).bookingid;
+        // and an auth token
+        String authToken = new BookingService().createAuthToken(
+                "admin", "password123");
+        // when deleting
+        service.delete(bookingIdToBeDeleted, authToken);
+    }
+
+    @Then("^Booking should be deleted successfully$")
+    public void bookingShouldBeDeletedSuccessfully() {
+        assertThat(service.doesBookingExist(bookingIdToBeDeleted)).isFalse();
     }
 }

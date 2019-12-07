@@ -44,11 +44,7 @@ public class BookingService extends AbstractBookerService {
     public void delete(int bookingID, String token) {
         getRequestSpec()
                 .cookie("token", token)
-                .delete(BookingEndpoint.BOOKING_ID.getUrl(bookingID))
-                // API does not match documentation
-                // .then()
-                // .statusCode(HttpStatus.SC_NO_CONTENT)
-                ;
+                .delete(BookingEndpoint.BOOKING_ID.getUrl(bookingID));
     }
 
     public boolean doesBookingExist(int bookingID) {

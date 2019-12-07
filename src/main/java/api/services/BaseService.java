@@ -17,18 +17,12 @@ public abstract class BaseService {
 
     protected abstract RequestSpecification getRequestSpec();
 
-    //protected abstract ResponseSpecification getResponseSpec();
-
     protected ExtractableResponse get(String url) {
         return get(ImmutableMap.of(), url);
     }
 
     protected ExtractableResponse get(Map<String, ?> params, String url) {
         return request(params, url);
-    }
-
-    protected ExtractableResponse delete(String url) {
-        return request(url);
     }
 
     protected ExtractableResponse request(Map<String, ?> params, String url) {
@@ -46,7 +40,6 @@ public abstract class BaseService {
                 .body(body)
                 .request(method, url)
                 .then()
-                .log().all()
                 .extract();
     }
 
@@ -63,5 +56,4 @@ public abstract class BaseService {
             Class<T> responseClass){
         return responseObject.as(responseClass);
     }
-
 }
