@@ -6,8 +6,8 @@
     </Console>
     <RollingFile
             name="FileLogger"
-            fileName="logs/api_sample_framework.log"
-            filePattern="logs/api_sample_framework-%d{yyyy-MM-dd}.log"
+            fileName="logs/billie-qaf.log"
+            filePattern="logs/billie-qaf-%d{yyyy-MM-dd}.log"
             append="true">
       <PatternLayout
               pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n"/>

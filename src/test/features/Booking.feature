@@ -20,7 +20,7 @@ Feature: Booking feature
     Then Booking should be deleted successfully
     And Deleted booking should not be accessible
 
-  Scenario: Create new booking
+  Scenario: Create new booking and access it
     Given booking service is up
     When User creates booking
     Then User should be successfully created

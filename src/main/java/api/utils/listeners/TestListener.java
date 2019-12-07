@@ -6,7 +6,7 @@ import org.testng.*;
 
 public class TestListener implements ITestListener {
 
-    private final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger(this);
 
     @Override
     public void onTestStart(ITestResult result) {

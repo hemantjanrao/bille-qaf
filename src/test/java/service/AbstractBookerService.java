@@ -1,6 +1,5 @@
 package service;
 
-import api.dto.AbstractDTO;
 import api.services.BaseService;
 import constant.BookingEndpoint;
 import io.restassured.RestAssured;
@@ -22,13 +21,5 @@ public abstract class AbstractBookerService extends BaseService {
 
     protected ExtractableResponse post(Object body, String url) {
         return request(Method.POST, body, url);
-    }
-
-    protected RequestSpecification update(Object body, String url) {
-        return (RequestSpecification) request(Method.PUT, body, url);
-    }
-
-    public <T extends AbstractDTO> T getParsed(ExtractableResponse response, Class<T> theClass){
-        return getParsedResponse(response, theClass);
     }
 }

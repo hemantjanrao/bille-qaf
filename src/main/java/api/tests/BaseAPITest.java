@@ -8,7 +8,5 @@ import org.testng.annotations.*;
 @Listeners({TestListener.class})
 @Test(groups = "base-api")
 public abstract class BaseAPITest {
-
     protected final Logger logger = LogManager.getLogger(this);
-
 }

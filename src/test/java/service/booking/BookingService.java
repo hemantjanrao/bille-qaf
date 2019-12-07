@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import constant.BookingEndpoint;
 import dto.data.Booking;
 import dto.response.CreateBookingResponse;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
 import service.AbstractBookerService;
 
@@ -52,9 +53,13 @@ public class BookingService extends AbstractBookerService {
         }
     }
 
-    public Response updateBooking(Booking booking, int bookingID, String token) {
-        return getRequestSpec()
-                .cookie("token", token)
-                .put(BookingEndpoint.BOOKING_ID.getUrl(bookingID));
+    public void updateBooking(Booking booking, int bookingID, String token) {
+         getRequestSpec()
+                .header("token",token)
+                .when()
+                .body(booking)
+                .request(Method.PUT, BookingEndpoint.BOOKING_ID.getUrl(bookingID))
+                .then()
+                .extract().response();
     }
 }

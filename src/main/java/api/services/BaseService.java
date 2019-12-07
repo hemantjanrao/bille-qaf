@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import io.restassured.http.Method;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 
 public abstract class BaseService {
 
-    protected static final Logger logger = LogManager.getLogger();
+    protected final Logger logger = LogManager.getLogger(this);
 
     protected abstract RequestSpecification getRequestSpec();
 
