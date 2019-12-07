@@ -1,16 +1,15 @@
 package stepdef;
 
-import com.sun.javafx.binding.StringFormatter;
+import api.utils.properties.Property;
 import cucumber.api.java.en.*;
 
 import dto.data.Booking;
 import dto.response.CreateBookingResponse;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import service.booking.BookingService;
 import service.ping.PingService;
-
-import static com.google.common.truth.Truth.assertThat;
 
 public class BookingStepdefs {
 
@@ -53,11 +52,11 @@ public class BookingStepdefs {
 
         // and an auth token
         String authToken = new BookingService().createAuthToken(
-                "admin", "password123");
+                Property.USERNAME.getValue(), Property.PASSWORD.getValue());
 
         Response response = service.updateBooking(bookingUpdate, bookingIdToBeUpdated, authToken);
 
-        Assert.assertEquals(response.statusCode(), 200,
+        Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
                 String.format("Update failed with status code %d", response.statusCode()));
     }
 
@@ -65,7 +64,6 @@ public class BookingStepdefs {
     public void bookingShouldBeUpdatedSuccessfully() {
         Booking booking = service.getBooking(bookingIdToBeUpdated);
 
-        //assertThat(service.getBooking(bookingIdToBeUpdated)).isEqualTo(booking);
         Assert.assertEquals(
                 booking,
                 bookingUpdate,
@@ -78,26 +76,41 @@ public class BookingStepdefs {
         bookingIdToBeDeleted = response.bookingid;
         // and an auth token
         String authToken = new BookingService().createAuthToken(
-                "admin", "password123");
+                Property.USERNAME.getValue(), Property.PASSWORD.getValue());
         // when deleting
         delete = service.delete(bookingIdToBeDeleted, authToken);
     }
 
     @Then("^Booking should be deleted successfully$")
     public void bookingShouldBeDeletedSuccessfully() {
-        assertThat(delete.statusCode()).isEqualTo(201);
-        assertThat(service.doesBookingExist(bookingIdToBeDeleted)).isFalse();
+        Assert.assertEquals(
+                delete.statusCode(),
+                HttpStatus.SC_CREATED,
+                String.format("Booking deletion failed with status code %d", delete.statusCode())
+        );
+
+        Assert.assertFalse(
+                service.doesBookingExist(bookingIdToBeDeleted),
+                "Booking is not successfully deleted"
+        );
     }
 
     @And("^Get the same booking$")
     public void getTheSameBooking() {
-        assertThat(service.getBooking(response.bookingid))
-                .isEqualTo(booking);
+        Assert.assertEquals(
+                service.getBooking(response.bookingid),
+                booking,
+                "Created booking is not accessible"
+        );
     }
 
     @And("^Deleted booking should not be accessible$")
     public void deletedBookingShouldNotBeAccessible() {
-        assertThat(service.getDeletedBooking(bookingIdToBeDeleted).statusCode()).isEqualTo(404);
+        Assert.assertEquals(
+                service.getDeletedBooking(bookingIdToBeDeleted).statusCode(),
+                HttpStatus.SC_NOT_FOUND,
+                String.format("Deleted booking is accessible with code %d",
+                        service.getDeletedBooking(bookingIdToBeDeleted).statusCode() ));
     }
 }
 
