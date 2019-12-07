@@ -10,8 +10,7 @@ import java.util.Properties;
 public enum Property {
 
     MAX_RETRY_COUNT("maxRetryCount"),
-    APP_URL("app_url"),
-    TOKEN("token");
+    APP_URL("app_url");
 
     private static Properties properties = null;
     private String value;

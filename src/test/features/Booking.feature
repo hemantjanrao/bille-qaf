@@ -1,4 +1,4 @@
-Feature: Get car offer from auto1.com
+Feature: Booking feature
 
   Scenario: Create new booking
     Given booking service is up
@@ -18,3 +18,9 @@ Feature: Get car offer from auto1.com
     And User should be successfully created
     And Delete the created booking
     Then Booking should be deleted successfully
+
+  Scenario: Create new booking
+    Given booking service is up
+    When User creates booking
+    Then User should be successfully created
+    And Get the same booking

@@ -12,15 +12,15 @@ import service.ping.PingService;
 
 import static com.google.common.truth.Truth.assertThat;
 
-public class BookingStepDef {
+public class BookingStepdefs {
 
     private BookingService service = null;
     private Booking booking;
     private AbstractDTO response;
     private int bookingIdToBeUpdated, bookingIdToBeDeleted = 0;
 
-    @Given("booking service is up")
-    public void featureIsAvailableToUser() {
+    @Given("^booking service is up$")
+    public void bookingServiceIsUp() {
         assertThat(new PingService().ping())
                 .isEqualTo("Created");
     }
@@ -77,4 +77,11 @@ public class BookingStepDef {
     public void bookingShouldBeDeletedSuccessfully() {
         assertThat(service.doesBookingExist(bookingIdToBeDeleted)).isFalse();
     }
+
+    @And("^Get the same booking$")
+    public void getTheSameBooking() {
+        assertThat(service.getBooking(((CreateBookingResponse)response).bookingid))
+                .isEqualTo(booking);
+    }
 }
+

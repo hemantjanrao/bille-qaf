@@ -10,14 +10,14 @@ import org.testng.annotations.Test;
 
 @CucumberOptions(
         features = "src/test/features",
-        glue = {"stepdefs"},
+        glue = {"stepdef"},
         tags = {"~@Ignore"},
         plugin = {"html:target/cucumber-reports",
                 "rerun:target/rerun.txt"},
         format = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber-pretty",
-                "json:target/cucumber-reports/CucumberTestReport.json"
+                "json:target/cucumber.json"
         }, strict = false)
 public class Runner extends AbstractTestNGCucumberTests {
     private cucumber.api.testng.TestNGCucumberRunner testNGCucumberRunner;
