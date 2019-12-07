@@ -24,6 +24,11 @@ public class BookingService extends AbstractBookerService {
                 .as(Booking.class);
     }
 
+    public Response getDeletedBooking(int id) {
+        return getRequestSpec()
+                .get(BookingEndpoint.BOOKING_ID.getUrl(id));
+    }
+
     public CreateBookingResponse createBooking(Booking booking) {
         return post(booking, BookingEndpoint.BOOKING.getUrl())
                 .as(CreateBookingResponse.class);
@@ -41,8 +46,8 @@ public class BookingService extends AbstractBookerService {
                 .jsonPath().get("token");
     }
 
-    public void delete(int bookingID, String token) {
-        getRequestSpec()
+    public Response delete(int bookingID, String token) {
+        return getRequestSpec()
                 .cookie("token", token)
                 .delete(BookingEndpoint.BOOKING_ID.getUrl(bookingID));
     }
@@ -65,8 +70,7 @@ public class BookingService extends AbstractBookerService {
     public Response updateBooking(Booking booking, int bookingID, String token) {
         return getRequestSpec()
                 .cookie("token", token)
-                .put(BookingEndpoint.BOOKING_ID.getUrl(bookingID))
-        ;
+                .put(BookingEndpoint.BOOKING_ID.getUrl(bookingID));
     }
 
 }

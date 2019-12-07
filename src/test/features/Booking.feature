@@ -18,6 +18,7 @@ Feature: Booking feature
     And User should be successfully created
     And Delete the created booking
     Then Booking should be deleted successfully
+    And Deleted booking should not be accessible
 
   Scenario: Create new booking
     Given booking service is up

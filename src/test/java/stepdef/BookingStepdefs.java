@@ -5,6 +5,7 @@ import cucumber.api.java.en.*;
 import api.dto.AbstractDTO;
 import dto.data.Booking;
 import dto.response.CreateBookingResponse;
+import io.restassured.response.Response;
 import service.booking.BookingService;
 import service.ping.PingService;
 
@@ -16,6 +17,7 @@ public class BookingStepdefs {
     private Booking booking;
     private AbstractDTO response;
     private int bookingIdToBeUpdated, bookingIdToBeDeleted = 0;
+    private Response delete;
 
     @Given("^booking service is up$")
     public void bookingServiceIsUp() {
@@ -68,11 +70,12 @@ public class BookingStepdefs {
         String authToken = new BookingService().createAuthToken(
                 "admin", "password123");
         // when deleting
-        service.delete(bookingIdToBeDeleted, authToken);
+        delete = service.delete(bookingIdToBeDeleted, authToken);
     }
 
     @Then("^Booking should be deleted successfully$")
     public void bookingShouldBeDeletedSuccessfully() {
+        assertThat(delete.statusCode()).isEqualTo(201);
         assertThat(service.doesBookingExist(bookingIdToBeDeleted)).isFalse();
     }
 
@@ -80,6 +83,11 @@ public class BookingStepdefs {
     public void getTheSameBooking() {
         assertThat(service.getBooking(((CreateBookingResponse)response).bookingid))
                 .isEqualTo(booking);
+    }
+
+    @And("^Deleted booking should not be accessible$")
+    public void deletedBookingShouldNotBeAccessible() {
+        assertThat(service.getDeletedBooking(bookingIdToBeDeleted).statusCode()).isEqualTo(404);
     }
 }
 
