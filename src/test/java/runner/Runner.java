@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
         format = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber-pretty",
-                "json:target/cucumber.json"
+                "json:target/cucumber-reports/CucumberTestReport.json"
         }, strict = false)
 public class Runner extends AbstractTestNGCucumberTests {
     private cucumber.api.testng.TestNGCucumberRunner testNGCucumberRunner;
