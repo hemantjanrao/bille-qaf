@@ -53,13 +53,16 @@ public class BookingService extends AbstractBookerService {
         }
     }
 
-    public void updateBooking(Booking booking, int bookingID, String token) {
-         getRequestSpec()
-                .header("token",token)
-                .when()
+    public Response updateBooking(Booking booking, int bookingID, String token) {
+         return getRequestSpec()
+                .header("Cookie","token="+token)
+                .header("Accept","application/json")
+                .header("Content-Type","application/json")
                 .body(booking)
+                .when()
                 .request(Method.PUT, BookingEndpoint.BOOKING_ID.getUrl(bookingID))
                 .then()
+                 .log().all()
                 .extract().response();
     }
 }

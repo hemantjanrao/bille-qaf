@@ -1,11 +1,12 @@
 package stepdef;
 
+import com.sun.javafx.binding.StringFormatter;
 import cucumber.api.java.en.*;
 
-import api.dto.AbstractDTO;
 import dto.data.Booking;
 import dto.response.CreateBookingResponse;
 import io.restassured.response.Response;
+import org.testng.Assert;
 import service.booking.BookingService;
 import service.ping.PingService;
 
@@ -14,18 +15,19 @@ import static com.google.common.truth.Truth.assertThat;
 public class BookingStepdefs {
 
     private BookingService service = null;
-    private Booking booking;
-    private AbstractDTO response;
+    private Booking booking, bookingUpdate;
+    private CreateBookingResponse response;
     private int bookingIdToBeUpdated, bookingIdToBeDeleted = 0;
     private Response delete;
 
     @Given("^booking service is up$")
     public void bookingServiceIsUp() {
-        assertThat(new PingService().ping())
-                .isEqualTo("Created");
+        Assert.assertEquals(
+                new PingService().ping(),
+                "Created", "Service is not running");
     }
 
-    @When("^User creates booking$")
+    @When("^Booking creates booking$")
     public void userCreatesBooking() {
         // given some booking data
         service = new BookingService();
@@ -35,37 +37,45 @@ public class BookingStepdefs {
         response = service.createBooking(booking);
     }
 
-    @Then("^User should be successfully created$")
+    @Then("^Booking should be successfully created$")
     public void userShouldSuccessfullyCreate() {
-        // the booking returned matches the input and is persisted
-        assertThat(((CreateBookingResponse)response).booking)
-                .isEqualTo(booking);
-        assertThat(service.getBooking(((CreateBookingResponse)response).bookingid))
-                .isEqualTo(booking);
+        Assert.assertEquals(
+                service.getBooking(response.bookingid),
+                booking,
+                String.format("Booking %s is unsuccessful", booking)
+        );
     }
 
     @Then("^Update the created booking$")
     public void updateTheCreatedBooking() {
-        bookingIdToBeUpdated = ((CreateBookingResponse) response).bookingid;
-        Booking bookingUpdate = Booking.newInstance();
+        bookingIdToBeUpdated = response.bookingid;
+        bookingUpdate = Booking.newInstance();
 
         // and an auth token
         String authToken = new BookingService().createAuthToken(
                 "admin", "password123");
 
-        service.updateBooking(bookingUpdate, bookingIdToBeUpdated, authToken);
+        Response response = service.updateBooking(bookingUpdate, bookingIdToBeUpdated, authToken);
+
+        Assert.assertEquals(response.statusCode(), 200,
+                String.format("Update failed with status code %d", response.statusCode()));
     }
 
     @Then("^Booking should be updated successfully$")
     public void bookingShouldBeUpdatedSuccessfully() {
         Booking booking = service.getBooking(bookingIdToBeUpdated);
 
-        assertThat(service.getBooking(bookingIdToBeUpdated)).isEqualTo(booking);
+        //assertThat(service.getBooking(bookingIdToBeUpdated)).isEqualTo(booking);
+        Assert.assertEquals(
+                booking,
+                bookingUpdate,
+                String.format("Created booking is %s and updated booking is %s", booking, bookingUpdate)
+        );
     }
 
     @And("^Delete the created booking$")
     public void deleteTheCreatedBooking() {
-        bookingIdToBeDeleted = ((CreateBookingResponse) response).bookingid;
+        bookingIdToBeDeleted = response.bookingid;
         // and an auth token
         String authToken = new BookingService().createAuthToken(
                 "admin", "password123");
@@ -81,7 +91,7 @@ public class BookingStepdefs {
 
     @And("^Get the same booking$")
     public void getTheSameBooking() {
-        assertThat(service.getBooking(((CreateBookingResponse)response).bookingid))
+        assertThat(service.getBooking(response.bookingid))
                 .isEqualTo(booking);
     }
 
