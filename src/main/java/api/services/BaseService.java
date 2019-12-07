@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import io.restassured.http.Method;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +37,6 @@ public abstract class BaseService {
                 .when()
                 .request(Method.GET, url)
                 .then()
-                //.spec(getResponseSpec())
                 .extract();
     }
 
@@ -46,7 +46,7 @@ public abstract class BaseService {
                 .body(body)
                 .request(method, url)
                 .then()
-                //.spec(getResponseSpec())
+                .log().all()
                 .extract();
     }
 
