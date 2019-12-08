@@ -113,4 +113,3 @@ public class BookingStepdefs {
                         service.getDeletedBooking(bookingIdToBeDeleted).statusCode() ));
     }
 }
-

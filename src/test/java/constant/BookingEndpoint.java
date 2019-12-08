@@ -20,5 +20,4 @@ public enum BookingEndpoint implements Endpoint {
     public String getUrl(Object... params) {
         return String.format(url, params);
     }
-
 }
