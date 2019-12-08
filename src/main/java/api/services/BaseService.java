@@ -1,6 +1,5 @@
 package api.services;
 
-import api.dto.AbstractDTO;
 import com.google.common.collect.ImmutableMap;
 import io.restassured.http.Method;
 import io.restassured.response.ExtractableResponse;
@@ -40,19 +39,5 @@ public abstract class BaseService {
                 .request(method, url)
                 .then()
                 .extract();
-    }
-
-    protected ExtractableResponse request(String url) {
-        return getRequestSpec()
-                .when()
-                .request(Method.DELETE, url)
-                .then()
-                .extract();
-    }
-
-    protected <T extends AbstractDTO> T getParsedResponse(
-            ExtractableResponse responseObject,
-            Class<T> responseClass){
-        return responseObject.as(responseClass);
     }
 }

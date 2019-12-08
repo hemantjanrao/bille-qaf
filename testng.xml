@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Auto1 Test suite" verbose="1" parallel="tests" thread-count="1" configfailurepolicy="continue">
-    <test name="Get car offer from auto1.com" annotations="JDK" preserve-order="true">
+<suite name="Billie test suite" verbose="1" parallel="tests" thread-count="1" configfailurepolicy="continue">
+    <test name="Test basic API calls" annotations="JDK" preserve-order="true">
         <classes>
             <class name="runner.Runner"/>
         </classes>
