@@ -2,7 +2,7 @@ package api.services;
 
 import com.google.common.collect.ImmutableMap;
 import io.restassured.http.Method;
-import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,29 +15,29 @@ public abstract class BaseService {
 
     protected abstract RequestSpecification getRequestSpec();
 
-    protected ExtractableResponse get(String url) {
+    protected Response get(String url) {
         return get(ImmutableMap.of(), url);
     }
 
-    protected ExtractableResponse get(Map<String, ?> params, String url) {
+    protected Response get(Map<String, ?> params, String url) {
         return request(params, url);
     }
 
-    protected ExtractableResponse request(Map<String, ?> params, String url) {
+    protected Response request(Map<String, ?> params, String url) {
         return getRequestSpec()
                 .params(params)
                 .when()
                 .request(Method.GET, url)
                 .then()
-                .extract();
+                .extract().response();
     }
 
-    protected ExtractableResponse request(Method method, Object body, String url) {
+    protected Response request(Method method, Object body, String url) {
         return getRequestSpec()
                 .when()
                 .body(body)
                 .request(method, url)
                 .then()
-                .extract();
+                .extract().response();
     }
 }

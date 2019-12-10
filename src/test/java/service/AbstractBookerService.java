@@ -4,7 +4,7 @@ import api.services.BaseService;
 import constant.BookingEndpoint;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
-import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public abstract class AbstractBookerService extends BaseService {
@@ -19,7 +19,7 @@ public abstract class AbstractBookerService extends BaseService {
                 .accept("application/json");
     }
 
-    protected ExtractableResponse post(Object body, String url) {
+    protected Response post(Object body, String url) {
         return request(Method.POST, body, url);
     }
 }
