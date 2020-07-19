@@ -13,7 +13,8 @@ import org.testng.annotations.Test;
         glue = {"stepdef"},
         tags = {"~@Ignore"},
         plugin = {"html:target/cucumber-reports",
-                "rerun:target/rerun.txt"},
+                "rerun:target/rerun.txt",
+                "json:target/cucumber.json"},
         format = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber-pretty",
